@@ -1,4 +1,4 @@
-var viewer;
+// var viewer;
 var svfURL = "https://lmv-models.s3.amazonaws.com/toy_plane/toy_plane.svf";
 var $ = function(div){return document.getElementById(div)}
 
@@ -7,7 +7,7 @@ document.addEventListener('mousewheel', e => { console.log(e) }, true);
 
 function initializeViewer() {
     window.devicePixelRatio = 1;
-    viewer = new Autodesk.Viewing.Private.GuiViewer3D($('forgeViewer'), {});
+    window.viewer = new Autodesk.Viewing.Private.GuiViewer3D($('forgeViewer'), {});
     var options = {
         env: "Local",
         useConsolidation: true,
@@ -19,9 +19,9 @@ function initializeViewer() {
 
     // Init after the viewer is ready
     function onSuccess() {
-        viewer.setBackgroundColor(0,0,0, 155,155,155);
-        viewer.impl.toggleGroundShadow(true);
-        viewer.loadExtension("markup3d");
+      window.viewer.setBackgroundColor(0,0,0, 155,155,155);
+      window.viewer.impl.toggleGroundShadow(true);
+      window.viewer.loadExtension("markup3d");
         initializeMarkup();
     }
 }
@@ -57,7 +57,7 @@ function initializeMarkup(){
 
 
 function switchView(level) {
-    viewer.restoreState(viewStates[level]);
+  window.viewer.restoreState(viewStates[level]);
 }
 
     // get view state from console

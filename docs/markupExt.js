@@ -53,19 +53,19 @@ markup3d.prototype.updateHitTest = function(event) {
     let canvas = event.target;
     let _x = event.offsetX * canvas.width / canvas.clientWidth | 0;
     let _y = event.offsetY * canvas.height / canvas.clientHeight | 0;
-    let x = _x / canvas.clientWidth + -1; // scales from -1 to 1
-    let y = _y / canvas.clientHeight + -1; // scales from -1 to 1
+    let x = 2 * (_x / canvas.clientWidth) - 1; // scales from -1 to 1
+    let y = -2 * (_y / canvas.clientHeight) + 1; // scales from -1 to 1, with direction reversed
 
     var vector = new THREE.Vector3(x, y, 0.5).unproject(this.camera);
     this.raycaster.set(this.camera.position, vector.sub(this.camera.position).normalize());
     var nodes = this.raycaster.intersectObject(this.pointCloud);
     if (nodes.length > 0) {
-        if (this.hovered)
+      if (this.hovered || this.hovered === 0)
             this.geometry.colors[this.hovered].r = 1.0;
         this.hovered = nodes[0].index;
         this.geometry.colors[this.hovered].r = 2.0;
         this.geometry.colorsNeedUpdate = true;
-        viewer.impl.invalidate(true);
+        window.viewer.impl.invalidate(true);
     }
 }
 
@@ -75,7 +75,8 @@ markup3d.prototype.unload = function() {
 
 markup3d.prototype.load = function() {
     var self = this;
-    this.offset = viewer.model.getData().globalOffset; // use global offset to align pointCloud with lmv scene
+    this.material = null;
+    this.offset = window.viewer.model.getData().globalOffset; // use global offset to align pointCloud with lmv scene
 
     // setup listeners for new data and mouse events
     window.addEventListener("newData", e => { this.setMarkupData( e.detail ) }, false);
@@ -106,7 +107,7 @@ markup3d.prototype.load = function() {
         else {
             // create new point cloud material
             var texture = THREE.ImageUtils.loadTexture("img/icons.png");
-            var material = new THREE.ShaderMaterial({
+            this.material = new THREE.ShaderMaterial({
                 vertexColors: THREE.VertexColors,
                 fragmentShader: this.fragmentShader,
                 vertexShader: this.vertexShader,
@@ -118,9 +119,12 @@ markup3d.prototype.load = function() {
                 }
             });
         }
-        this.pointCloud = new THREE.PointCloud(this.geometry, material);
+        this.pointCloud = new THREE.PointCloud(this.geometry, this.material);
         this.pointCloud.position.sub( this.offset );
-        this.scene.add(this.pointCloud);
+        if (!this.viewer.overlays.hasScene('custom-scene')) {
+          this.viewer.overlays.addScene('custom-scene');
+        }
+        this.viewer.overlays.addMesh(this.pointCloud , 'custom-scene');
     }
 
 
@@ -130,7 +134,11 @@ markup3d.prototype.load = function() {
         geom.faces = [new THREE.Face3(0,1,2)];
         this.line3d = new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: this.lineColor, side: THREE.DoubleSide }) );
         this.line3d.position.sub( this.offset );
-        this.scene.add(this.line3d);
+        // this.scene.add(this.line3d);
+        if (!this.viewer.overlays.hasScene('custom-scene')) {
+          this.viewer.overlays.addScene('custom-scene');
+        }
+        this.viewer.overlays.addMesh(this.line3d, 'custom-scene');
     }
 
     this.update_Line = function() {
@@ -161,12 +169,12 @@ markup3d.prototype.load = function() {
 
     this.onClick = function() {
         this.updateHitTest(event);
-        if (!this.hovered) return;
+        if (!this.hovered && this.hovered !== 0) return;
         this.selected = this.hovered;
         this.update_Line();
         this.update_DivLabel('onMarkupClick');
-        viewer.impl.invalidate(true);
-        viewer.clearSelection();
+        window.viewer.impl.invalidate(true);
+        window.viewer.clearSelection();
     }
 
     return true;
