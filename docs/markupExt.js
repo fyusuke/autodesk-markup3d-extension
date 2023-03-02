@@ -106,7 +106,7 @@ markup3d.prototype.load = function() {
             this.scene.remove(this.pointCloud); //replace existing pointCloud Mesh
         else {
             // create new point cloud material
-            var texture = THREE.ImageUtils.loadTexture("img/icons.png");
+            var texture = THREE.ImageUtils.loadTexture("img/pin_mark.png");
             this.material = new THREE.ShaderMaterial({
                 vertexColors: THREE.VertexColors,
                 fragmentShader: this.fragmentShader,
