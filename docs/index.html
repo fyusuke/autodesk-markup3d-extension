@@ -15,7 +15,7 @@
     <script src="app.js"></script>
     <script src="markupExt.js"></script>
     <style>
-        html {color: white; font-family: Avenir Next, Arial;}
+        html {color: white; font-family: Avenir Next, Arial; height: 100%;}
         a:link {color: white}
         a:visited {color: white}
         p {margin:15px 0 0 10px;}
@@ -45,18 +45,27 @@
     </style>
 </head>
 
-<body onload="initializeViewer();" style="margin:0">
-    <div id="forgeViewer" ></div>
-    <div id="label">na</div>
-    <div id="menu">
-    <p>> My Views</p>
-    <ul>
-        <li><a href="#" onClick="switchView('view1')">view 1</a></li>
-        <li><a href="#" onClick="switchView('view2')">view 2</a></li>
-        <li><a href="#" onClick="switchView('view3')">view 3</a></li>
-    </ul>
-    <br>
-    <div>
+<body onload="initializeViewer();" style="margin:0; height: 100%; width: 100%;">
+  <div style="display: flex; flex-direction: column; height: 100%;">
+    <div style="width: 100%; height: 100px; background-color: green;"></div>
+    <div style="flex-grow: 1; width:100%; display: flex;">
+      <div style="width: 200px; height: 100%;"></div>
+
+      <div style="flex-grow: 1; height: 100%; position: relative;">
+        <div id="forgeViewer" style="height: 100%;"></div>
+        <div id="label">na</div>
+        <div id="menu">
+          <p>> My Views</p>
+          <ul>
+            <li><a href="#" onClick="switchView('view1')">view 1</a></li>
+            <li><a href="#" onClick="switchView('view2')">view 2</a></li>
+            <li><a href="#" onClick="switchView('view3')">view 3</a></li>
+          </ul>
+          <br>
+        <div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

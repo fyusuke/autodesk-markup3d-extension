@@ -2,9 +2,6 @@
 var svfURL = "https://lmv-models.s3.amazonaws.com/toy_plane/toy_plane.svf";
 var $ = function(div){return document.getElementById(div)}
 
-document.addEventListener('mousewheel', e => { console.log(e) }, true);
-
-
 function initializeViewer() {
     window.devicePixelRatio = 1;
     window.viewer = new Autodesk.Viewing.Private.GuiViewer3D($('forgeViewer'), {});

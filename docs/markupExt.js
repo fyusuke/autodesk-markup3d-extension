@@ -94,7 +94,7 @@ markup3d.prototype.load = function() {
         data.map(item => {
             point = (new THREE.Vector3(item.x, item.y, item.z));
             this.geometry.vertices.push(point);
-            this.geometry.colors.push(new THREE.Color(1.0, item.icon, 0)); // icon = 0..2 position in the horizontal icons.png sprite sheet
+            this.geometry.colors.push(new THREE.Color(1.0, item.icon, 0)); // icon = 0..3 position in the horizontal icons.png sprite sheet
         });
         this.initMesh_PointCloud();
         this.initMesh_Line();
@@ -106,13 +106,14 @@ markup3d.prototype.load = function() {
             this.scene.remove(this.pointCloud); //replace existing pointCloud Mesh
         else {
             // create new point cloud material
-            var texture = THREE.ImageUtils.loadTexture("img/ball.png");
+            var texture = THREE.ImageUtils.loadTexture("img/test.png");
             this.material = new THREE.ShaderMaterial({
                 vertexColors: THREE.VertexColors,
                 fragmentShader: this.fragmentShader,
                 vertexShader: this.vertexShader,
                 depthWrite: true,
                 depthTest: true,
+                opacity: 0.1,
                 uniforms: {
                     size: { type: "f", value: this.size },
                     tex: { type: "t", value: texture }
