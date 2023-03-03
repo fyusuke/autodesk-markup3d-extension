@@ -18,6 +18,7 @@ function markup3d(viewer, options) {
     this.selected; // index of selected pointCloud id, based on markupItems array
     this.label; // x,y div position of selected pointCloud. updated on mouse-move
     this.offset; // global offset
+    this.viwer = viewer;
 
     this.vertexShader = `
         uniform float size;
@@ -65,7 +66,7 @@ markup3d.prototype.updateHitTest = function(event) {
         this.hovered = nodes[0].index;
         this.geometry.colors[this.hovered].r = 2.0;
         this.geometry.colorsNeedUpdate = true;
-        window.viewer.impl.invalidate(true);
+        this.viewer.impl.invalidate(true);
     }
 }
 
@@ -74,9 +75,8 @@ markup3d.prototype.unload = function() {
 };
 
 markup3d.prototype.load = function() {
-    var self = this;
     this.material = null;
-    this.offset = window.viewer.model.getData().globalOffset; // use global offset to align pointCloud with lmv scene
+    this.offset = this.viewer.model.getData().globalOffset; // use global offset to align pointCloud with lmv scene
 
     // setup listeners for new data and mouse events
     window.addEventListener("newData", e => { this.setMarkupData( e.detail ) }, false);
@@ -174,8 +174,8 @@ markup3d.prototype.load = function() {
         this.selected = this.hovered;
         this.update_Line();
         this.update_DivLabel('onMarkupClick');
-        window.viewer.impl.invalidate(true);
-        window.viewer.clearSelection();
+        this.viewer.impl.invalidate(true);
+        this.viewer.clearSelection();
     }
 
     return true;
