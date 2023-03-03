@@ -71,12 +71,12 @@ markup3d.prototype.load = function () {
   this.offset = this.viewer.model.getData().globalOffset; // use global offset to align pointCloud with lmv scene
 
   // setup listeners for new data and mouse events
-  window.addEventListener("newData", (e) => this.setMarkupData(e.detail), false);
-  document.addEventListener("mousedown", (e) => this.onClick(e), true);
-  document.addEventListener("touchstart", (e) => this.onClick(e.changedTouches[0]), false);
-  document.addEventListener("mousemove", (e) => this.onMouseMove(e), false);
-  document.addEventListener("touchmove", (e) => this.onMouseMove(e.changedTouches[0]), false);
-  document.addEventListener("mousewheel", (e) => this.onMouseMove(e), true);
+  this.viewer.container.addEventListener("newData", (e) => this.setMarkupData(e.detail), false);
+  this.viewer.container.addEventListener("mousedown", (e) => this.onClick(e), true);
+  this.viewer.container.addEventListener("touchstart", (e) => this.onClick(e.changedTouches[0]), false);
+  this.viewer.container.addEventListener("mousemove", (e) => this.onMouseMove(e), false);
+  this.viewer.container.addEventListener("touchmove", (e) => this.onMouseMove(e.changedTouches[0]), false);
+  this.viewer.container.addEventListener("mousewheel", (e) => this.onMouseMove(e), true);
 
   // Load markup points into Point Cloud
   this.setMarkupData = function (data) {

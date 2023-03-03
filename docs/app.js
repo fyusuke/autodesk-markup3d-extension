@@ -34,5 +34,5 @@ function initializeMarkup() {
       z: Math.random() * 150 - 130,
     });
   }
-  window.dispatchEvent(new CustomEvent("newData", { detail: dummyData }));
+  viewer.container.dispatchEvent(new CustomEvent("newData", { detail: dummyData }));
 }
