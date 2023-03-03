@@ -224,27 +224,14 @@ markup3d.prototype.load = function () {
     this.updateHitTest(event);
   };
 
-  // this.onClick = function() {
-  //     this.updateHitTest(event);
-  //     if (!this.hovered && this.hovered !== 0) return;
-  //     this.selected = this.hovered;
-  //     this.update_Line();
-  //     this.update_DivLabel('onMarkupClick');
-  //     window.viewer.impl.invalidate(true);
-  //     window.viewer.clearSelection();
-  // }
-
   this.onClick = function (e) {
-    // ピンマーク追加
+    // add a new mark
     if (this.isAddMode) {
-      console.log(e);
-      // オブジェクト以外をクリックしたときはnullが返る
       const posInWorld = this.viewer.clientToWorld(e.offsetX, e.offsetY, true);
-      console.log("posInWorld", posInWorld);
 
       if (posInWorld) {
         const mark = {
-          icon: 0, // 0固定
+          icon: 0,
           x: posInWorld.point.x,
           y: posInWorld.point.y,
           z: posInWorld.point.z,
@@ -258,9 +245,6 @@ markup3d.prototype.load = function () {
     } else {
       this.updateHitTest(event);
       if (!this.hovered && this.hovered !== 0) {
-        // ピンマークがクリックされていないとき
-        // this.isAddMode = false;
-        // this.addButton.setState(1);
         return;
       }
       this.selected = this.hovered;
@@ -273,11 +257,11 @@ markup3d.prototype.load = function () {
 };
 
 markup3d.prototype.onToolbarCreated = function (toolbar) {
-  // ピンマーク追加ボタン
+  // button to add a new mark
   this.addButton = new Autodesk.Viewing.UI.Button("AddPinMarkExtension");
   this.addButton.onClick = (e) => {
     this.isAddMode = !this.isAddMode;
-    this.addButton.setState(this.isAddMode ? 0 : 1); // 0はAddMode, 1は非AddMode
+    this.addButton.setState(this.isAddMode ? 0 : 1);
   };
   this.addButton.setToolTip("ピンマークを追加");
   this.addButton.container.children[0].classList.add(
@@ -285,7 +269,7 @@ markup3d.prototype.onToolbarCreated = function (toolbar) {
     "fa-map-marker-alt"
   );
 
-  // サブツールバー
+  // subtoolbar
   this.subToolbar =
     this.viewer.toolbar.getControl("CustomToolbar") ||
     new Autodesk.Viewing.UI.ControlGroup("CustomToolbar");
